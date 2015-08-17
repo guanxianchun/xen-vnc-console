@@ -59,6 +59,7 @@ public class JavaInitialize extends JDialog implements ConnectionListener,
         try {           
             logOnConsole = false;
             hideCADButton = false;
+            logger.info(args[0]);
             writeline("");
             writeline("Loading UI...");
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

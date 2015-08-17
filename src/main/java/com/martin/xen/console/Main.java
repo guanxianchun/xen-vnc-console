@@ -85,6 +85,8 @@ public class Main {
                 RawHTTP http = new RawHTTP("CONNECT", uri.getHost(), 443, uri
                         .getPath().concat("?").concat(uri.getQuery()), uuid,
                         "https".equals(uri.getProtocol()), _listener, _console);
+                System.out.println("*****"+uri.getPath().concat("?").concat(uri.getQuery())+"---"+uri.getQuery());
+                System.out.println(uri.toString());
                 http.connect();
                 stream_.connect(http, new char[0]);
             } else {

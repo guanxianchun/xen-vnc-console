@@ -59,8 +59,7 @@ import javax.net.ssl.SSLSocket;
  * connections and import/export operations.
  */
 public final class RawHTTP {
-	private static final Logger logger = Logger.getLogger(RawHTTP.class
-			.getName());
+	private static final Logger logger = Logger.getLogger(RawHTTP.class.getName());
 
 	private static final Pattern END_PATTERN = Pattern.compile("^\r\n$");
 	private static final Pattern HEADER_PATTERN = Pattern
@@ -95,9 +94,8 @@ public final class RawHTTP {
 
 	private ConsoleListener _console;
 
-	public RawHTTP(String command, String host, int port, String path,
-			String session, boolean useSSL, ConnectionListener listner,
-			ConsoleListener console) {
+	public RawHTTP(String command, String host, int port, String path, String session,
+			boolean useSSL, ConnectionListener listner, ConsoleListener console) {
 		this.command = command;
 		this.host = host;
 		this.port = port;
@@ -122,8 +120,7 @@ public final class RawHTTP {
 	private Socket _getSocket() throws IOException {
 		logger.info("socket connect : host=" + host + " ,port=" + port);
 		if (useSSL) {
-			javax.net.ssl.SSLContext context = SSLHelper.getInstance()
-					.getSSLContext();
+			javax.net.ssl.SSLContext context = SSLHelper.getInstance().getSSLContext();
 			SSLSocket ssl = null;
 			try {
 				context.init(null, trustAllCerts, new SecureRandom());
@@ -175,8 +172,7 @@ public final class RawHTTP {
 					String status_code = m.group(1);
 					String reason_phrase = m.group(2);
 					if (!"200".equals(status_code)) {
-						throw new IOException("HTTP status " + status_code
-								+ " " + reason_phrase);
+						throw new IOException("HTTP status " + status_code + " " + reason_phrase);
 					}
 				} else {
 					throw new IOException("Unknown HTTP line " + line);
@@ -197,8 +193,8 @@ public final class RawHTTP {
 
 	private String[] makeHeaders() {
 		String[] headers = { String.format("%s %s HTTP/1.0", command, path),
-				String.format("Host: %s", host),
-				String.format("Cookie: session_id=%s", session), "" };
+				String.format("Host: %s", host), String.format("Cookie: session_id=%s", session),
+				"" };
 		return headers;
 	}
 

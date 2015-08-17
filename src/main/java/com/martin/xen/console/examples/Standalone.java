@@ -119,8 +119,10 @@ public class Standalone extends JFrame {
 		Map<VM, Record> rec = VM.getAllRecords(conn);
 		for (Map.Entry<VM, Record> e:rec.entrySet())
 		{
-			if (e.getValue().domid > 0)
+			if (e.getValue().domid > 0){
 				model.addElement(new VMEntry(e.getValue()));
+				System.out.println(e.getValue().nameLabel);
+			}
 		}
 	}
 	

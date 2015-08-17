@@ -1121,6 +1121,7 @@ public class VNCStream {
             // _console.writeline("readServerMessage");
             // java.lang._console.writeline(in_.available());
             int type = readCard8();
+            System.out.println(type);
             switch (type) {
             case FRAME_BUFFER_UPDATE:
                 // _console.writeline("Update");
