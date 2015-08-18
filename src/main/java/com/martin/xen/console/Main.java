@@ -41,70 +41,70 @@ import javax.swing.SwingUtilities;
 
 public class Main {
 
-    public static void main(String[] args) throws Throwable {
-        new Main(args, new Initialize(), new Initialize());
-    }
+	public static void main(String[] args) throws Throwable {
+		new Main(args, new Initialize(), new Initialize());
+	}
 
-    private static final Logger logger = Logger.getLogger(Main.class.getName());
+	private static final Logger logger = Logger.getLogger(Main.class.getName());
 
-    public final VNCCanvas canvas_ = new VNCCanvas();
-    public VNCStream stream_;
-    private boolean usessl;
-    private String path;
-    private String auth;
-    private int port;
-    private ConnectionListener _listener;
-    private ConsoleListener _console;
+	public final VNCCanvas canvas_ = new VNCCanvas();
+	public VNCStream stream_;
+	private boolean usessl;
+	private String path;
+	private String auth;
+	private int port;
+	private ConnectionListener _listener;
+	private ConsoleListener _console;
 
-    public boolean firstTime = true;
+	public boolean firstTime = true;
 
-    public Main(String[] args, ConnectionListener listener,
-            ConsoleListener console) {
+	public Main(String[] args, ConnectionListener listener, ConsoleListener console) {
 
-        if ("true".equals(args[2])) {
-            usessl = true;
-        } else {
-            usessl = false;
-            port = Integer.parseInt(args[3]);
-        }
-        path = args[0];
-        auth = args[1];
-        stream_ = new VNCStream(canvas_, listener, console);
-        canvas_.setStream(stream_);
-        canvas_.setConsoleListener(console);
-        _listener = listener;
-        _console = console;
-    }
+		if ("true".equals(args[2])) {
+			usessl = true;
+		} else {
+			usessl = false;
+			port = Integer.parseInt(args[3]);
+		}
+		path = args[0];
+		auth = args[1];
+		stream_ = new VNCStream(canvas_, listener, console);
+		canvas_.setStream(stream_);
+		canvas_.setConsoleListener(console);
+		_listener = listener;
+		_console = console;
+	}
 
-    public void connect() {
-        try {
-            if (usessl) {
-                stream_.disconnect();
-                URL uri = new URL(path);
-                String uuid = auth;
-                RawHTTP http = new RawHTTP("CONNECT", uri.getHost(), 443, uri
-                        .getPath().concat("?").concat(uri.getQuery()), uuid,
-                        "https".equals(uri.getProtocol()), _listener, _console);
-                System.out.println("*****"+uri.getPath().concat("?").concat(uri.getQuery())+"---"+uri.getQuery());
-                System.out.println(uri.toString());
-                http.connect();
-                stream_.connect(http, new char[0]);
-            } else {
-                stream_.disconnect();
-                String password = auth;
-                int n = password.length();
-                char[] c = new char[n];
-                password.getChars(0, n, c, 0);
-                stream_.connectSocket(new Socket(path, port), c);
-            }
-        } catch (final Throwable t) {
-            if (_listener != null) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        _listener.ConnectionFailed(t.getMessage());
-                    }
-                });
-            }
-        }
-    }
+	public void connect() {
+		try {
+			if (usessl) {
+				stream_.disconnect();
+				URL uri = new URL(path);
+				String uuid = auth;
+				RawHTTP http = new RawHTTP("CONNECT", uri.getHost(), 443, uri.getPath().concat("?")
+						.concat(uri.getQuery()), uuid, "https".equals(uri.getProtocol()),
+						_listener, _console);
+				System.out.println("*****" + uri.getPath().concat("?").concat(uri.getQuery())
+						+ "---" + uri.getQuery());
+				System.out.println(uri.toString());
+				http.connect();
+				stream_.connect(http, new char[0]);
+			} else {
+				stream_.disconnect();
+				String password = auth;
+				int n = password.length();
+				char[] c = new char[n];
+				password.getChars(0, n, c, 0);
+				stream_.connectSocket(new Socket(path, port), c);
+			}
+		} catch (final Throwable t) {
+			if (_listener != null) {
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						_listener.ConnectionFailed(t.getMessage());
+					}
+				});
+			}
+		}
+	}
 }

@@ -59,6 +59,7 @@ import javax.net.ssl.SSLSocket;
  * connections and import/export operations.
  */
 public final class RawHTTP {
+	
 	private static final Logger logger = Logger.getLogger(RawHTTP.class.getName());
 
 	private static final Pattern END_PATTERN = Pattern.compile("^\r\n$");

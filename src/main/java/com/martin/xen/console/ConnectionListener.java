@@ -33,6 +33,7 @@
 package com.martin.xen.console;
 
 public interface ConnectionListener {
+	
     public void ConnectionMade();
 
     public void ConnectionLost(String reason);

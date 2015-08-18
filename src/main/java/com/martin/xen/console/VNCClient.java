@@ -41,26 +41,24 @@ import java.awt.Image;
  */
 public interface VNCClient {
 
-    public void clientDrawImage(Image image, int x, int y, int width, int height);
+	public void clientDrawImage(Image image, int x, int y, int width, int height);
 
-    /**
-     * Set the client-side cursor to the given image. The parameters x and y
-     * specify the cursor hotspot.
-     */
-    public void clientSetCursor(Image image, int x, int y);
+	/**
+	 * Set the client-side cursor to the given image. The parameters x and y
+	 * specify the cursor hotspot.
+	 */
+	public void clientSetCursor(Image image, int x, int y);
 
-    public void clientCopyRectangle(int x, int y, int width, int height,
-            int dx, int dy);
+	public void clientCopyRectangle(int x, int y, int width, int height, int dx, int dy);
 
-    public void clientFillRectangle(int x, int y, int width, int height,
-            Color color);
+	public void clientFillRectangle(int x, int y, int width, int height, Color color);
 
-    public void clientFrameBufferUpdate();
+	public void clientFrameBufferUpdate();
 
-    public void clientBell();
+	public void clientBell();
 
-    public void clientCutText(String text);
+	public void clientCutText(String text);
 
-    public void clientDesktopSize(int width, int height);
+	public void clientDesktopSize(int width, int height);
 
 }

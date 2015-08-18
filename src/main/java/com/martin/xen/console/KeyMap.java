@@ -42,76 +42,77 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 public class KeyMap {
-    private static final Logger logger = Logger.getLogger(KeyMap.class.getName());
 
-    public static KeyMap getInstance() {
-        return instance_;
-    }
+	private static final Logger logger = Logger.getLogger(KeyMap.class.getName());
 
-    static KeyMap instance_ = new KeyMap();
+	public static KeyMap getInstance() {
+		return instance_;
+	}
 
-    Map<Integer, Integer> map_ = new HashMap<Integer, Integer>();
+	static KeyMap instance_ = new KeyMap();
 
-    public KeyMap() {
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new InputStreamReader(getClass()
-                    .getResourceAsStream("KeyMap.properties")));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                line = line.trim();
-                if (line.length() == 0 || line.startsWith("#")) {
-                    continue;
-                }
-                int index = line.indexOf("=0x");
-                if (index == -1) {
-                    throw new IOException("malformed line: " + line);
-                }
-                String keycode_str = line.substring(0, index);
-                int keycode = KeyEvent.class.getField(keycode_str).getInt(null);
-                int keysym = Integer.parseInt(line.substring(index + 3), 16);
-                if (map_.containsKey(keycode)) {
-                    throw new IOException("Duplicate entry " + line);
-                }
-                map_.put(keycode, keysym);
-            }
-        } catch (Throwable t) {
-            logger.log(Level.WARNING, t.getMessage(), t);
-        }
-    }
+	Map<Integer, Integer> map_ = new HashMap<Integer, Integer>();
 
-    int unicodeToKeysym(int c) {
-        if (c < 0x20) {
-            // The Ctrl- block. By the RFB spec, these should be
-            // transmitted as separate Ctrl and lower-case letter
-            // keystrokes. We've already sent the down-Ctrl, so now we
-            // just need to send the code for the letter. Add 0x60 to move
-            // from the 0-0x1f ASCII range into 0x60-0x7f.
-            return c + 0x60;
-        } else if ((c <= 0x7e) || ((0xa0 <= c) && (c <= 0xff))) {
-            return c;
-        }
-        return -1;
-    }
+	public KeyMap() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(
+					"KeyMap.properties")));
+			String line;
+			while ((line = reader.readLine()) != null) {
+				line = line.trim();
+				if (line.length() == 0 || line.startsWith("#")) {
+					continue;
+				}
+				int index = line.indexOf("=0x");
+				if (index == -1) {
+					throw new IOException("malformed line: " + line);
+				}
+				String keycode_str = line.substring(0, index);
+				int keycode = KeyEvent.class.getField(keycode_str).getInt(null);
+				int keysym = Integer.parseInt(line.substring(index + 3), 16);
+				if (map_.containsKey(keycode)) {
+					throw new IOException("Duplicate entry " + line);
+				}
+				map_.put(keycode, keysym);
+			}
+		} catch (Throwable t) {
+			logger.log(Level.WARNING, t.getMessage(), t);
+		}
+	}
 
-    public int getKeysym(KeyEvent event) {
-        int result = getMappedKey(event.getKeyCode());
-        if (result == -1) {
-            char c = event.getKeyChar();
-            return c == KeyEvent.CHAR_UNDEFINED ? -1 : unicodeToKeysym(c);
-        } else {
-            return result;
-        }
-    }
+	int unicodeToKeysym(int c) {
+		if (c < 0x20) {
+			// The Ctrl- block. By the RFB spec, these should be
+			// transmitted as separate Ctrl and lower-case letter
+			// keystrokes. We've already sent the down-Ctrl, so now we
+			// just need to send the code for the letter. Add 0x60 to move
+			// from the 0-0x1f ASCII range into 0x60-0x7f.
+			return c + 0x60;
+		} else if ((c <= 0x7e) || ((0xa0 <= c) && (c <= 0xff))) {
+			return c;
+		}
+		return -1;
+	}
 
-    /**
-     * @param keycode
-     *            One of the KeyEvent VK_ constants.
-     * @return The keysym for that code, if it is in the map, or -1 otherwise.
-     */
-    public int getMappedKey(int keycode) {
-        Integer ks = map_.get(keycode);
-        return ks == null ? -1 : ks;
-    }
+	public int getKeysym(KeyEvent event) {
+		int result = getMappedKey(event.getKeyCode());
+		if (result == -1) {
+			char c = event.getKeyChar();
+			return c == KeyEvent.CHAR_UNDEFINED ? -1 : unicodeToKeysym(c);
+		} else {
+			return result;
+		}
+	}
+
+	/**
+	 * @param keycode
+	 *            One of the KeyEvent VK_ constants.
+	 * @return The keysym for that code, if it is in the map, or -1 otherwise.
+	 */
+	public int getMappedKey(int keycode) {
+		Integer ks = map_.get(keycode);
+		return ks == null ? -1 : ks;
+	}
 
 }

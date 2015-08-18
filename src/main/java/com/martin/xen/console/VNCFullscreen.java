@@ -32,82 +32,81 @@
  */
 package com.martin.xen.console;
 
-import javax.swing.JPanel;
-import javax.swing.JFrame;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.logging.Logger;
-import java.util.logging.Level;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class VNCFullscreen extends JFrame implements KeyListener {
-    private static final Logger logger = Logger.getLogger(VNCFullscreen.class.getName());
+	private static final Logger logger = Logger.getLogger(VNCFullscreen.class.getName());
 
-    static final long serialVersionUID = 0;
+	static final long serialVersionUID = 0;
 
-    JPanel _panel;
-    VNCCanvas _canvas;
-    JPanel _buttons;
+	JPanel _panel;
+	VNCCanvas _canvas;
+	JPanel _buttons;
 
-    public VNCFullscreen(JPanel console, VNCCanvas canvas, boolean fullscreen,
-            java.awt.Color c) {
-        this.setBackground(c);
-        _panel = console;
-        _canvas = canvas;
-        if (fullscreen) {
-            this.setUndecorated(true);
-            _canvas.isFullscreen = true;
-            _canvas.screen = this;
-            java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment()
-                    .getDefaultScreenDevice().setFullScreenWindow(this);
-            this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            this.addKeyListener(this);
-        } else {
-            this.setSize(800, 600);
-        }
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setVisible(true);
-        this.add(_panel);
-        _canvas.requestFocusInWindow();
-    }
+	public VNCFullscreen(JPanel console, VNCCanvas canvas, boolean fullscreen, java.awt.Color c) {
+		this.setBackground(c);
+		_panel = console;
+		_canvas = canvas;
+		if (fullscreen) {
+			this.setUndecorated(true);
+			_canvas.isFullscreen = true;
+			_canvas.screen = this;
+			java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
+					.setFullScreenWindow(this);
+			this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			this.addKeyListener(this);
+		} else {
+			this.setSize(800, 600);
+		}
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setVisible(true);
+		this.add(_panel);
+		_canvas.requestFocusInWindow();
+	}
 
-    public void dispose() {
-        setVisible(false);
-        if (_panel != null) {
-            remove(_panel);
-        }
-        if (_buttons != null) {
-            remove(_buttons);
-        }
-        super.dispose();
-    }
+	public void dispose() {
+		setVisible(false);
+		if (_panel != null) {
+			remove(_panel);
+		}
+		if (_buttons != null) {
+			remove(_buttons);
+		}
+		super.dispose();
+	}
 
-    public void focus() {
-        if (getState() == JFrame.ICONIFIED) {
-            setState(JFrame.NORMAL);
-        }
-        this.requestFocus();
-        _canvas.requestFocusInWindow();
-    }
+	public void focus() {
+		if (getState() == JFrame.ICONIFIED) {
+			setState(JFrame.NORMAL);
+		}
+		this.requestFocus();
+		_canvas.requestFocusInWindow();
+	}
 
-    public void NoMessinDispose() {
-        super.dispose();
-    }
+	public void NoMessinDispose() {
+		super.dispose();
+	}
 
-    public void keyPressed(KeyEvent e) {
-        if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_ALT) {
-            dispose();
-        } else {
-            _canvas.keyPressed(e);
-        }
-    }
+	public void keyPressed(KeyEvent e) {
+		if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_ALT) {
+			dispose();
+		} else {
+			_canvas.keyPressed(e);
+		}
+	}
 
-    public void keyReleased(KeyEvent e) {
-        _canvas.keyReleased(e);
+	public void keyReleased(KeyEvent e) {
+		_canvas.keyReleased(e);
 
-    }
+	}
 
-    public void keyTyped(KeyEvent e) {
-        _canvas.keyTyped(e);
+	public void keyTyped(KeyEvent e) {
+		_canvas.keyTyped(e);
 
-    }
+	}
 }

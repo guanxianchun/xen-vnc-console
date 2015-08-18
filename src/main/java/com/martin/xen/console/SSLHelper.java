@@ -34,64 +34,60 @@ package com.martin.xen.console;
 
 import java.security.KeyStore;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 
 public class SSLHelper {
-    private static final Logger logger = Logger.getLogger(SSLHelper.class.getName());
 
-    public static final String[] cipherSuites = { "TLS_DHE_RSA_WITH_AES_128_CBC_SHA" };
-    private static SSLContext sSSLContext = null;
-    private static SSLHelper instance = new SSLHelper();
+	private static final Logger logger = Logger.getLogger(SSLHelper.class.getName());
 
-    /**
-     * Factory method to get the singleton of this class
-     * 
-     * @return <Code>SSLHelper</Code>
-     */
-    public static SSLHelper getInstance() {
-        return instance;
-    }
+	public static final String[] cipherSuites = { "TLS_DHE_RSA_WITH_AES_128_CBC_SHA" };
+	private static SSLContext sSSLContext = null;
+	private static SSLHelper instance = new SSLHelper();
 
-    public SSLContext getSSLContext() {
-        return sSSLContext;
-    }
+	/**
+	 * Factory method to get the singleton of this class
+	 * 
+	 * @return <Code>SSLHelper</Code>
+	 */
+	public static SSLHelper getInstance() {
+		return instance;
+	}
 
-    private void init() {
-        try {
-            SSLContext pSSLContext = SSLContext.getInstance("SSL", "SunJSSE");
+	public SSLContext getSSLContext() {
+		return sSSLContext;
+	}
 
-            // The reference implementation only supports X.509 keys
-            KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509",
-                    "SunJSSE");
-            TrustManagerFactory tmf = TrustManagerFactory.getInstance(
-                    "SunX509", "SunJSSE");
+	private void init() {
+		try {
+			SSLContext pSSLContext = SSLContext.getInstance("SSL", "SunJSSE");
 
-            // Sun's default kind of key store
-            KeyStore ks = KeyStore.getInstance("JCEKS", "SunJCE");
+			// The reference implementation only supports X.509 keys
+			KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509", "SunJSSE");
+			TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509", "SunJSSE");
 
-            char[] password = "b3646d1424de7a06".toCharArray();
-            ks.load(this.getClass().getResourceAsStream("client.ks"), password);
-            // ks.load(ResourceLoader.getResourceAsStream("appserver.ks"),
-            // password);
-            kmf.init(ks, password);
-            tmf.init(ks);
+			// Sun's default kind of key store
+			KeyStore ks = KeyStore.getInstance("JCEKS", "SunJCE");
 
-            pSSLContext
-                    .init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
-            sSSLContext = pSSLContext;
-        } catch (Exception e) {
-            System.out.println("ERROR: failed to initialize SSLContext: "
-                    + e.getMessage());
-            e.printStackTrace();
-            // TODO: handle exceptions
-        }
-    }
+			char[] password = "b3646d1424de7a06".toCharArray();
+			ks.load(this.getClass().getResourceAsStream("client.ks"), password);
+			// ks.load(ResourceLoader.getResourceAsStream("appserver.ks"),
+			// password);
+			kmf.init(ks, password);
+			tmf.init(ks);
 
-    private SSLHelper() {
-        init();
-    }
+			pSSLContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+			sSSLContext = pSSLContext;
+		} catch (Exception e) {
+			System.out.println("ERROR: failed to initialize SSLContext: " + e.getMessage());
+			e.printStackTrace();
+			// TODO: handle exceptions
+		}
+	}
+
+	private SSLHelper() {
+		init();
+	}
 }
